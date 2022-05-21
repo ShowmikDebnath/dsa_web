@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/utils.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blogpost.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <title>DSA - CodersCombo</title>
+</head>
+
+<body>
+    <nav class="navigation max-width-1 m-auto">
+        <div class="nav-left">
+
+            <!-- <span>LogoHere</span> -->
+            <a href="index.html">
+                <span><img src="img/logo-1.png" alt="logo" class="logo-img"></span>
+            </a>
+            <!-- <span><img src="img/logo-1.png" alt="logo" class="logo-img"></span> -->
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">About</a></li>
+                <li><a href="index.html">Contact</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <form action="/search.html" method="get">
+                <input class="form-input" type="text" name="query" placeholder="Algorithm Search">
+                <button class="btn">Search</button>
+            </form>
+
+        </div>
+    </nav>
+
+    <div class="max-width-1 m-auto">
+        <hr>
+    </div>
+
+    <div class="post-img">
+        <img src="img/home.svg" alt="">
+    </div>
+    <div class="blog-post-content max-width-2 m-auto my-2">
+        <h1 class="font1">Dijkastra’s Algorithm</h1>
+        <!-- <div class="blogpost-meta">
+            div.author
+        </div> -->
+        <br>
+        <p class="font-1">
+            Dijkastra’s algorithm allows us to find the shortest path between any two vertices of a graph.
+            <br>
+            <br>
+            <b>How Dijkastra’s Algorithm works-</b>
+            <br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Dijkastra’s Algorithm works on the basis that any subpath B=>D of the shortest path A=>D between vertices A and D is also the shortest path between vertices B and D.
+            <br>
+            Dijkastra’s used this property in the opposite direction i.e we overestimate the distance of each vertex from the starting vertex. Then we visit each node and its neighbors to find the shortest subpath to those neighbors.
+            <br>
+            The algorithm uses a greedy approach in the sense that we find the next best solution hoping that the end result is the best solution for the whole problem.
+
+            <br><br>
+            <b>Idea-</b>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;1. Assign a distance value to all vertices in the input graph. Initialize all distance values as INFINITE, Assign distance value as 0 for the source vertex.
+            <br>
+            <img class="img-blo" src="img/dijkastra1.png" alt="diskastra1">
+            <br><br>
+            <img class="img-blo" src="img/dijkastra2.png" alt="diskastra2">
+            <br><br>
+            <img class="img-blo" src="img/dijkastra3.png" alt="diskastra3">
+            <br>
+            <br>
+
+            <br>
+            <b>CP Problem:</b>
+            <br>
+            Given a weight graph. Find the single source shortest path from a vertex U to all the vertices in the graph. If the node is unreachable, then print -1.
+            <br><br>
+            <b>Note: </b>The weights of the edges must be positive,
+            <b>Sample test case:</b>
+            <br><br>
+            <b>Input: </b>
+            <br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;[4 vertices and 4 Edges]
+            <br>1&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;24&nbsp;&nbsp;&nbsp;&nbsp;[1,2 are edges and 24 is weights/cost]
+            <br>1&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;20
+            <br>3&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;3
+            <br>4&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;12
+            <br>1&nbsp;&nbsp;&nbsp;&nbsp;[source edges]<br><br>
+
+            <b>Output: </b>
+            <br>
+            0&nbsp;&nbsp;&nbsp;&nbsp;24&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;15
+            
+            <br><br>
+            <b>Source Code</b>
+            <br>
+            <br>
+            #include"bits/stdc++.h"
+            <br>using namespace std;
+
+            <br>const int inf = 1e7;
+
+            <br>int main(){
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;int n, m;
+
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;cin>>n>>m;
+
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;vector<int> dist(n+1, inf);
+                    <br> &nbsp;&nbsp;&nbsp;&nbsp;vector<vector<pair<int, int>>>graph(n+1);
+
+                        <br>    &nbsp;&nbsp;&nbsp;&nbsp;for(int i=0;i<m; i++){
+                            <br>        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int u, v, w;
+                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cin>>u>>v>>w;
+
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graph[u].push_back({v,w});
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graph[v].push_back({u,w});
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;}
+
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;int source;
+
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;cin>>source;
+
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;dist[source]=0;
+
+                            <br>       &nbsp;&nbsp;&nbsp;&nbsp;set<pair<int, int>> s;
+
+                                <br>       &nbsp;&nbsp;&nbsp;&nbsp;s.insert({0,source});   //{wt, vertex}.....Order
+
+                                <br>      &nbsp;&nbsp;&nbsp;&nbsp;while(!s.empty()){
+                                    <br>         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auto x = *(s.begin());
+                                    <br>         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.erase(x);
+
+                                    <br>         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(auto it:graph[x.second]){
+                                        <br>             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(dist[it.first]>dist[x.second]+it.second){
+                                            <br>                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.erase({dist[it.first], it.first});
+                                            <br>                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[it.first]=dist[x.second]+it.second;
+                                            <br>                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.insert({dist[it.first], it.first});
+                                            <br>                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+                                            <br>               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+                                            <br>               &nbsp;&nbsp;&nbsp;&nbsp;}
+
+                                            <br>               &nbsp;&nbsp;&nbsp;&nbsp;for(int i=1; i<=n; i++){
+                                                <br>                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(dist[i]<inf){
+                                                    <br>                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout<<dist[i]<<" ";
+                                                    <br>                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+                                                    <br>                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else{
+                                                        <br>                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout<<-1<<" ";
+                                                        <br>                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+                                                        <br>                          &nbsp;&nbsp;&nbsp;&nbsp;}
+                                                        <br>                           }
+<!---->
+<br><br>
+
+<b>Watch the video for understande more-</b>
+        </p>
+
+        <div class="yt-video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/sIAV0vTQBfQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+    </div>
+
+    <div class="max-width-1 m-auto">
+        <hr>
+    </div>
+
+    <div class="home-articles max-width-1 m-auto font1">
+        <h2>People who read this also read</h2>
+        <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div>
+
+        <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div>
+        <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div>
+        <!-- <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+            
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+                
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div>
+        <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+            
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+                
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div>
+        <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+            
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+                
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div>
+        <div class="home-article">
+            <div class="home-article-img">
+                <img src="img/home.svg" alt="article1">
+            </div>
+            
+            <div class="home-article-content font1">
+                <a href="/blogpost.html">
+                    <h3>Lorem ipsum dolor sit amet consectetur adipisicing.</h3>
+                </a>
+                
+                <span>Author Name</span>
+                <span>07 January | 6 min read</span>
+            </div>
+        </div> -->
+    </div>
+
+    <div class="footer">
+        Copyright 2022 &copy; CodersCombo
+    </div>
+</body>
+
+</html>
